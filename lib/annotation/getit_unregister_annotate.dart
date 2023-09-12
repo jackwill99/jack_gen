@@ -1,0 +1,3 @@
+class GetItUnregister {
+  const GetItUnregister();
+}

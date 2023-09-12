@@ -1,0 +1,19 @@
+targets:
+  $default:
+    builders:
+      generators|annotations:
+        enabled: true
+      freezed:
+        options:
+          any_map: true
+          explicit_to_json: true
+
+builders:
+  generators:
+    target: ":jack_gen"
+    import: "package:jack_gen/builder.dart"
+    builder_factories: [ "generateUnregister", ]
+    build_extensions: { ".dart": [ ".lint_visitor_generator.g.part" ] }
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: [ "source_gen|combining_builder" ]
