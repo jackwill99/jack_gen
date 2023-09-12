@@ -16,8 +16,7 @@ class GetItUnregisterGenerator extends GeneratorForAnnotation<GetItUnregister> {
 
     final buffer = StringBuffer()
       ..writeln("extension on ${visitor.className}{")
-      ..writeln("  Future<void> deInit() async {")
-      ..writeln("    final getIt = GetIt.I;");
+      ..writeln("  Future<void> deInit() async {");
 
     for (final element in visitor.printData.keys) {
       final String data = visitor.printData[element]!;
