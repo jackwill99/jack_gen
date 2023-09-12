@@ -1,7 +1,7 @@
 import "package:analyzer/dart/element/element.dart";
 import "package:analyzer/dart/element/visitor.dart";
 
-class Visitor extends SimpleElementVisitor<void> {
+class Visitor<T> extends SimpleElementVisitor {
   String className = "";
   Map<String, String> printData = {};
 

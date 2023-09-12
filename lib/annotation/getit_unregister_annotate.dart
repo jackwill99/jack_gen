@@ -1,3 +1,5 @@
 class GetItUnregister {
-  const GetItUnregister();
+  const GetItUnregister({this.isSingleton = true});
+  
+  final bool isSingleton;
 }
