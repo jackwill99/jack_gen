@@ -24,22 +24,51 @@ class GetItUnregisterGenerator extends GeneratorForAnnotation<GetItUnregister> {
 
     final annotation = getAnnotationFields(element);
 
-    final buffer = StringBuffer()
-      ..writeln("extension on ${visitor.className}{")
-      ..writeln("  Future<void> deInit() async {");
+    final initBuffers = <String>[];
+    final deInitBuffers = <String>[];
 
-    for (final element in visitor.printData.keys) {
-      final String data = visitor.printData[element]!;
+    for (final element in visitor.readyData.keys) {
+      final String data = visitor.readyData[element]!;
       if (data == visitor.className && annotation) {
         continue;
       }
+      initBuffers.addAll(
+        [
+          "  $element = $data();",
+          "  getIt.registerLazySingleton(() => $data());",
+        ],
+      );
 
-      buffer.writeln("    getIt.unregister<$data>();");
+      deInitBuffers.add("  getIt.unregister<$data>();");
+    }
+
+    // Initialize buffers
+    final buffer = StringBuffer()
+      ..writeln("extension on ${visitor.className} {")
+      ..writeln("  void init() {");
+
+    for (final buf in initBuffers) {
+      buffer.writeln(buf);
+    }
+
+    buffer
+      ..writeln("  }")
+      ..writeln("\n");
+
+    print("");
+
+    // De-Initialize buffers
+    buffer.writeln("  void deInit() {");
+
+    for (final buf in deInitBuffers) {
+      buffer.writeln(buf);
     }
 
     buffer
       ..writeln("  }")
       ..writeln("}");
+
+    print(visitor.nestedData);
 
     return buffer.toString();
   }
