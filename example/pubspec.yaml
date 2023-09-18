@@ -39,6 +39,7 @@ dependencies:
   build: ^2.4.1
   jack_gen:
     path: ../
+  get_it: ^7.6.4
 
 dev_dependencies:
   flutter_test:

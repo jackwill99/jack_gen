@@ -7,12 +7,35 @@ part of 'main.dart';
 // **************************************************************************
 
 extension on Profile {
+  static bool isRegistered = false;
+  static bool? noKeyIsRegister;
+
   void init() {
-    noKey = TestMal();
-    getIt.registerLazySingleton(() => TestMal());
+    if (!isRegistered) {
+      isRegistered = true;
+
+      noKeyIsRegister = getIt.isRegistered<TestP>();
+      if (!noKeyIsRegister!) {
+        getIt.registerSingleton(TestP());
+      }
+
+      test = TestMalNaw(getIt.call<TestP>());
+      getIt.registerLazySingleton(() => test);
+
+      test2 = TestMal(getIt.call<TestMalNaw>());
+      getIt.registerLazySingleton(() => test2);
+    }
   }
 
   void deInit() {
+    isRegistered = false;
+
+    if (noKeyIsRegister != null && !noKeyIsRegister!) {
+      getIt.unregister<TestP>();
+      noKeyIsRegister = null;
+    }
+
+    getIt.unregister<TestMalNaw>();
     getIt.unregister<TestMal>();
   }
 }

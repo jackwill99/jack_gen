@@ -8,6 +8,8 @@ class Visitor<T> extends SimpleElementVisitor {
   Map<String, String> readyData = {};
   List<GetItKeyAnnotate> nestedData = [];
 
+  final uniqueIndex = <int>[];
+
   @override
   void visitConstructorElement(ConstructorElement element) {
     className = element.type.returnType.toString().replaceAll("*", "");
@@ -24,17 +26,26 @@ class Visitor<T> extends SimpleElementVisitor {
       readyData[element.name] = elementType;
     } else {
       final index = attribute.getField("index")!.toIntValue()!;
+
+      if (uniqueIndex.contains(index)) {
+        throw "Duplicate Index Key! Fuck up bro 😎";
+      } else {
+        uniqueIndex.add(index);
+      }
+
       final dependencyIndex =
           attribute.getField("dependencyIndex")!.toListValue()!;
       final isRegistered = attribute.getField("isRegistered")!.toBoolValue()!;
       final isRegisteredAndAssign =
           attribute.getField("isRegisteredAndAssign")!.toBoolValue()!;
+      final lazy = attribute.getField("lazy")!.toBoolValue()!;
 
       final object = GetItKeyAnnotate(
         index: index,
         dependencyIndex: dependencyIndex.map((e) => e.toIntValue()!).toList(),
         isRegistered: isRegistered,
         isRegisteredAndAssign: isRegisteredAndAssign,
+        lazy: lazy,
         variableName: element.name,
         dataType: elementType,
       );
