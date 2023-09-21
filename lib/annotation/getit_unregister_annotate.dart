@@ -1,3 +1,5 @@
+import "package:analyzer/dart/element/element.dart";
+
 class GetItUnregister {
   const GetItUnregister({this.isSingleton = true});
 
@@ -27,6 +29,7 @@ class GetItKeyAnnotate extends GetItKey {
     required super.isRegistered,
     required super.isRegisteredAndAssign,
     required super.lazy,
+    required this.parameters,
     required this.variableName,
     required this.dataType,
     this.declared = false,
@@ -35,4 +38,5 @@ class GetItKeyAnnotate extends GetItKey {
   bool declared;
   final String variableName;
   final String dataType;
+  final List<ParameterElement> parameters;
 }

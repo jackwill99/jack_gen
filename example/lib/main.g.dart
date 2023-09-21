@@ -22,7 +22,7 @@ extension on Profile {
       test = TestMalNaw(getIt.call<TestP>());
       getIt.registerLazySingleton(() => test);
 
-      test2 = TestMal(getIt.call<TestMalNaw>());
+      test2 = TestMal(getIt.call<TestMalNaw>(), t: getIt.call<TestP>());
       getIt.registerLazySingleton(() => test2);
     }
   }

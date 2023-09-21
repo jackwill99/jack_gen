@@ -21,14 +21,15 @@ class Profile {
   @GetItKey(index: 0, isRegistered: true, lazy: false)
   late TestP noKey;
 
-  @GetItKey(index: 2, dependencyIndex: [1])
+  @GetItKey(index: 2, dependencyIndex: [1, 0])
   late TestMal test2;
 }
 
 class TestMal {
-  TestMal(this.n);
+  TestMal(this.n, {required this.t});
 
   final TestMalNaw n;
+  final TestP t;
 }
 
 class TestMalNaw {

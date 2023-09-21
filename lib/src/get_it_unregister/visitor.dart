@@ -1,6 +1,7 @@
 import "package:analyzer/dart/element/element.dart";
 import "package:analyzer/dart/element/visitor.dart";
 import "package:jack_gen/annotation/getit_unregister_annotate.dart";
+import "package:jack_gen/src/get_it_unregister/child_visitor.dart";
 import "package:source_gen/source_gen.dart";
 
 class Visitor<T> extends SimpleElementVisitor {
@@ -25,6 +26,9 @@ class Visitor<T> extends SimpleElementVisitor {
     if (attribute == null) {
       readyData[element.name] = elementType;
     } else {
+      final childVisitor = ChildVisitor();
+      element.type.element?.visitChildren(childVisitor);
+
       final index = attribute.getField("index")!.toIntValue()!;
 
       if (uniqueIndex.contains(index)) {
@@ -40,6 +44,10 @@ class Visitor<T> extends SimpleElementVisitor {
           attribute.getField("isRegisteredAndAssign")!.toBoolValue()!;
       final lazy = attribute.getField("lazy")!.toBoolValue()!;
 
+      if (dependencyIndex.length != childVisitor.parameters.length) {
+        throw "Parameters of class constructor and dependencyIndexes are not same 🤷‍";
+      }
+
       final object = GetItKeyAnnotate(
         index: index,
         dependencyIndex: dependencyIndex.map((e) => e.toIntValue()!).toList(),
@@ -48,6 +56,7 @@ class Visitor<T> extends SimpleElementVisitor {
         lazy: lazy,
         variableName: element.name,
         dataType: elementType,
+        parameters: childVisitor.parameters,
       );
 
       nestedData.add(object);
