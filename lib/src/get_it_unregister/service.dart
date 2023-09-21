@@ -15,12 +15,17 @@ class GetItUnregisterService {
     }
   }
 
-  String _generateParameters(List<ParameterElement> params) {
+  String _generateParameters(
+    List<String> dependTypes,
+    List<ParameterElement> params,
+  ) {
     return params
+        .asMap()
+        .entries
         .map(
-          (e) => e.isPositional
-              ? "getIt.call<${e.type.toString()}>()"
-              : "${e.name} : getIt.call<${e.type.toString()}>()",
+          (e) => e.value.isPositional
+              ? "getIt.call<${dependTypes[e.key]}>()"
+              : "${e.value.name} : getIt.call<${dependTypes[e.key]}>()",
         )
         .join(",");
   }
@@ -37,7 +42,6 @@ class GetItUnregisterService {
     print(
       "$dependType and ${value.parameters.map((e) => e.toString()).toList()}",
     );
-    print(_generateParameters(value.parameters));
 
     if (value.isRegistered) {
       staticVariableString = "static bool? $variable;";
@@ -63,7 +67,7 @@ class GetItUnregisterService {
       buffers.$1.addAll([
         "      $variable = getIt.isRegistered<${value.dataType}>();",
         "      if (!$variable!) {",
-        "        ${value.variableName} = ${value.dataType}(${dependType != null ? _generateParameters(value.parameters) : ""});",
+        "        ${value.variableName} = ${value.dataType}(${dependType != null ? _generateParameters(dependType, value.parameters) : ""});",
         "        ${_getItRegister(value.variableName, lazy: value.lazy)}",
         "      }",
         "",
@@ -78,7 +82,7 @@ class GetItUnregisterService {
       ]);
     } else {
       buffers.$1.addAll([
-        "      ${value.variableName} = ${value.dataType}(${dependType != null ? _generateParameters(value.parameters) : ""});",
+        "      ${value.variableName} = ${value.dataType}(${dependType != null ? _generateParameters(dependType, value.parameters) : ""});",
         "      ${_getItRegister(value.variableName, lazy: value.lazy)}",
         "",
       ]);

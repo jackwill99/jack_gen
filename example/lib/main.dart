@@ -16,7 +16,7 @@ class Profile {
   static final Profile _instance = Profile._();
 
   @GetItKey(index: 1, dependencyIndex: [0])
-  late TestMalNaw test;
+  late TestLozYaP test;
 
   @GetItKey(index: 0, isRegistered: true, lazy: false)
   late TestP noKey;
@@ -30,6 +30,10 @@ class TestMal {
 
   final TestMalNaw n;
   final TestP t;
+}
+
+class TestLozYaP extends TestMalNaw {
+  TestLozYaP(super.t);
 }
 
 class TestMalNaw {

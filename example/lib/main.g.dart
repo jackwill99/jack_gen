@@ -19,10 +19,10 @@ extension on Profile {
         getIt.registerSingleton(TestP());
       }
 
-      test = TestMalNaw(getIt.call<TestP>());
+      test = TestLozYaP(getIt.call<TestP>());
       getIt.registerLazySingleton(() => test);
 
-      test2 = TestMal(getIt.call<TestMalNaw>(), t: getIt.call<TestP>());
+      test2 = TestMal(getIt.call<TestLozYaP>(), t: getIt.call<TestP>());
       getIt.registerLazySingleton(() => test2);
     }
   }
@@ -35,7 +35,7 @@ extension on Profile {
       noKeyIsRegister = null;
     }
 
-    getIt.unregister<TestMalNaw>();
+    getIt.unregister<TestLozYaP>();
     getIt.unregister<TestMal>();
   }
 }
